@@ -1,0 +1,14 @@
+<h3>Welcome to the marketplace</h3>
+
+
+<button (click)="getListing()">For sale</button>
+
+
+<ng-container *ngFor="let token of listing">
+  <mat-list>
+    <mat-list-item>
+      <p>Token : {{token.tokenId}} / Price : {{token.price}} ether</p>
+      <button (click)="buyToken(token.tokenId, token.price)">Buy</button>
+    </mat-list-item>
+  </mat-list>
+</ng-container>

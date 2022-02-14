@@ -1,1 +1,15 @@
-<p>profile works!</p>
+<h3>My profile : {{address}}</h3>
+
+<ng-container *ngIf="ids?.length; else noTokenOwned">
+
+  <h4>My tokens ids :</h4>
+
+  <ng-container *ngFor="let token of ids">
+    <p>{{token}}</p>
+  </ng-container>
+
+</ng-container>
+
+<ng-template #noTokenOwned>
+  <p>Lol you don't own any NFT you poor bastard</p>
+</ng-template>

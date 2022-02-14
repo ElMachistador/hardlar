@@ -4,6 +4,8 @@ import { AdminComponent } from './admin.component';
 
 import { RouterModule } from '@angular/router';
 
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 
 @NgModule({
@@ -12,6 +14,7 @@ import { RouterModule } from '@angular/router';
   ],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     RouterModule.forChild([{ path: '', component: AdminComponent }])
   ]
 })

@@ -1,1 +1,29 @@
-<p>token works!</p>
+<h3>Token details</h3>
+
+<ng-container *ngIf="!owner; else tokenOwned">
+
+  <p>This token is owned by : {{ownedBy}}</p>
+
+</ng-container>
+
+
+<ng-template #tokenOwned>
+
+  <p>Well played my dude, it's your token</p>
+
+  <section>
+    <label>Send to</label>
+    <input type="text" [formControl]="addressTo">
+    <button (click)="transferToken()">Transfer</button>
+  </section>
+
+
+  <section>
+    <label>Put it on the market place</label>
+    <input type="number" [formControl]="price">
+    <button (click)="putOnMarket()">Sell</button>
+  </section>
+
+
+
+</ng-template>

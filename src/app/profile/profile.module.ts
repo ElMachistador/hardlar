@@ -4,6 +4,8 @@ import { ProfileComponent } from './profile.component';
 
 import { RouterModule } from '@angular/router';
 
+import { MatListModule } from '@angular/material/list';
+
 
 
 @NgModule({
@@ -12,6 +14,7 @@ import { RouterModule } from '@angular/router';
   ],
   imports: [
     CommonModule,
+    MatListModule,
     RouterModule.forChild([{ path: '', component: ProfileComponent }])
   ]
 })

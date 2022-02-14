@@ -1,1 +1,14 @@
-<p>admin works!</p>
+<h3>Admin page</h3>
+
+<section>
+  <form [formGroup]="form">
+    <label>Address</label>
+    <input type="text" formControlName="address">
+
+    <label>Token Id</label>
+    <input type="text" formControlName="tokenId">
+
+    <button (click)="mint()">Mint</button>
+
+  </form>
+</section>

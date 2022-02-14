@@ -4,6 +4,10 @@ import { HomeComponent } from './home.component';
 
 import { RouterModule } from '@angular/router';
 
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { MatListModule } from '@angular/material/list'
+
 
 
 @NgModule({
@@ -12,6 +16,8 @@ import { RouterModule } from '@angular/router';
   ],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
+    MatListModule,
     RouterModule.forChild([{ path: '', component: HomeComponent }])
   ]
 })

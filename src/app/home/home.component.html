@@ -1,1 +1,15 @@
-<p>home works!</p>
+<H3>Home page</H3>
+
+<section>
+  <label>Balance</label>
+  <input type="text" [formControl]="balanceOf">
+  <button (click)="getBalance()">Balance</button>
+</section>
+
+<section>
+    <mat-nav-list>
+      <mat-list-item *ngFor="let id of obsId | async " [routerLink]="['/token', id]">
+        {{id}}
+      </mat-list-item>
+    </mat-nav-list>
+</section>
