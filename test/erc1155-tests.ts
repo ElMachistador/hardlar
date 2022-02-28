@@ -9,10 +9,10 @@ function parse(number: number) {
   return Number(aled);
 };
 
-async function getInfo(id: number, marketplace: Marketplace1155, token: any) {
+async function getInfo(marketplace: Marketplace1155, token: any, id: number, owner: string) {
   const [amount, price] = await Promise.all([
-    marketplace.toSell(id, token.address).then(result => result.amount),
-    marketplace.toSell(id, token.address).then(result => result.price),
+    marketplace.toSell(token.address, id, owner).then(result => result.amount),
+    marketplace.toSell(token.address, id, owner).then(result => result.price),
   ]);
   return `${amount},${price}`;
 }
@@ -63,12 +63,12 @@ describe("1155", () => {
     const tx = await market1.addOffer(token.address, 1, 50, 10);
     await tx.wait();
 
-    expect(await getInfo(1, marketplace, token)).to.equal("50,10");
+    expect(await getInfo(marketplace, token, 1, add1)).to.equal("50,500");
 
     const cnl = await market1.cancelOffer(token.address, 1);
     await cnl.wait();
 
-    expect(await getInfo(1, marketplace, token)).to.equal("0,0");
+    expect(await getInfo(marketplace, token, 1, add1)).to.equal("0,0");
   });
 
 
@@ -85,9 +85,9 @@ describe("1155", () => {
     await tx.wait();
 
 
-    expect(await getInfo(1, marketplace, token)).to.equal('50,10');
-    expect(await getInfo(2, marketplace, token)).to.equal('100,20');
-    expect(await getInfo(3, marketplace, token)).to.equal('150,30');
+    expect(await getInfo(marketplace, token, 1, add1)).to.equal('50,500');
+    expect(await getInfo(marketplace, token, 2, add1)).to.equal('100,2000');
+    expect(await getInfo(marketplace, token, 3, add1)).to.equal('150,4500');
 
   });
 
@@ -104,7 +104,7 @@ describe("1155", () => {
 
     const market4 = marketplace.connect(signer4);
 
-    const tx2 = await market4.acceptBatchOffer(token.address, [1, 2, 3], "0x00", { value: 60 });
+    const tx2 = await market4.acceptBatchOffer(token.address, [1, 2, 3], add1, [50, 100, 150], "0x00", { value: 7000 });
     await tx2.wait();
 
     const bigBatchBalance = await token.balanceOfBatch([add4, add4, add4], [1, 2, 3]);
@@ -122,12 +122,12 @@ describe("1155", () => {
     const tx = await market1.addOffer(token.address, 1, 50, 10);
     await tx.wait();
 
-    expect(await getInfo(1, marketplace, token)).to.equal('50,10')
+    expect(await getInfo(marketplace, token, 1, add1)).to.equal('50,500')
 
     const cnl = await market1.cancelOffer(token.address, 1);
     await cnl.wait();
 
-    expect(await getInfo(1, marketplace, token)).to.equal('0,0')
+    expect(await getInfo(marketplace, token, 1, add1)).to.equal('0,0')
 
   });
 
@@ -142,23 +142,92 @@ describe("1155", () => {
     //
 
     const [id1, id2, id3] = await Promise.all([
-      getInfo(1, marketplace, token),
-      getInfo(2, marketplace, token),
-      getInfo(3, marketplace, token),
+      getInfo(marketplace, token, 1, add1),
+      getInfo(marketplace, token, 2, add1),
+      getInfo(marketplace, token, 3, add1),
     ]);
 
-    expect([id1, id2, id3]).to.deep.equal(['50,10', '100,20', '150,30']);
+    expect([id1, id2, id3]).to.deep.equal(['50,500', '100,2000', '150,4500']);
 
     const cnl = await market1.cancelBatchOffer(token.address, [1, 2, 3]);
     await cnl.wait();
 
     const [nid1, nid2, nid3] = await Promise.all([
-      getInfo(1, marketplace, token),
-      getInfo(2, marketplace, token),
-      getInfo(3, marketplace, token),
+      getInfo(marketplace, token, 1, add1),
+      getInfo(marketplace, token, 2, add1),
+      getInfo(marketplace, token, 3, add1),
     ]);
 
     expect([nid1, nid2, nid3]).to.deep.equal(['0,0', '0,0', '0,0']);
+
+  });
+
+
+  it("A buyer should be able to buy an specified amount and the mapping should update accordingly", async function () {
+
+    //previous tx to create an offre on the marketplace
+    const token1 = token.connect(signer1);
+    const approval = await token1.setApprovalForAll(marketplace.address, true);
+    await approval.wait();
+    const market1 = marketplace.connect(signer1);
+    const tx = await market1.addOffer(token.address, 1, 100, 10);
+    await tx.wait();
+    //
+
+    const market2 = marketplace.connect(signer2);
+
+    const tx2 = await market2.acceptOffer(token.address, 1, add1, 99, "0x00", { value: 990 });
+    await tx2.wait();
+
+    expect(await getInfo(marketplace, token, 1, add1)).to.equal("1,10")
+
+  });
+
+  it("If the amount of token to sell reach 0, the offer should be deleted from the mapping", async function () {
+    //previous tx to create an offre on the marketplace
+    const token1 = token.connect(signer1);
+    const approval = await token1.setApprovalForAll(marketplace.address, true);
+    await approval.wait();
+    const market1 = marketplace.connect(signer1);
+    const tx = await market1.addOffer(token.address, 1, 100, 10);
+    await tx.wait();
+    const market2 = marketplace.connect(signer2);
+    const tx2 = await market2.acceptOffer(token.address, 1, add1, 99, "0x00", { value: 990 });
+    await tx2.wait();
+    //
+
+    const market3 = marketplace.connect(signer3);
+    const tx3 = await market3.acceptOffer(token.address, 1, add1, 1, "0x00", { value: 10 });
+    await tx3.wait();
+
+    const checkListing = await marketplace.toSell(token.address, 1, add1);
+
+    expect(await getInfo(marketplace, token, 1, add1)).to.equal("0,0");
+
+  });
+
+  it("The buyer should be able to buy a specified amount of each token in batch, the mapping should update accordingly and should be deleted if the amount reach 0", async function () {
+
+    const token1 = token.connect(signer1);
+    const approval = await token1.setApprovalForAll(marketplace.address, true);
+    await approval.wait();
+
+    const market1 = marketplace.connect(signer1);
+    const tx = await market1.addGroupOffer(token.address, [1, 2, 3], [100, 200, 300], [10, 20, 30]);
+    await tx.wait();
+
+    const market2 = marketplace.connect(signer2);
+    const tx2 = await market2.acceptBatchOffer(token.address, [1, 2, 3], add1, [50, 100, 150], "0x00", { value: 7000 });
+    tx2.wait();
+
+
+    const market3 = marketplace.connect(signer3);
+    const tx3 = await market3.acceptBatchOffer(token.address, [1, 2, 3], add1, [50, 100, 150], "0x00", { value: 7000 });
+    await tx3.wait();
+
+    expect(await getInfo(marketplace, token, 1, add1)).to.equal("0,0");
+    expect(await getInfo(marketplace, token, 2, add1)).to.equal("0,0");
+    expect(await getInfo(marketplace, token, 3, add1)).to.equal("0,0");
 
   });
 

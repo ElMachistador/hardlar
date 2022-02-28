@@ -1,5 +1,18 @@
-mat-toolbar{
+.normal-toolbar{
   background-color: rgb(166, 147, 184);
   height: 80px;
   justify-content: space-around;
+  a{
+    text-decoration: none;
+  }
+}
+
+.super-toolbar{
+  background-color: rgb(75, 70, 80);
+  height: 80px;
+  justify-content: space-around;
+  a{
+    text-decoration: none;
+    color: red;
+  }
 }

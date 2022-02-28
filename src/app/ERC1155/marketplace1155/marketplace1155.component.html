@@ -1,1 +1,59 @@
-<p>marketplace1155 works!</p>
+<h3>Marketplace</h3>
+
+<button (click)="getBalance()">Get my balance</button>
+
+<button (click)="getListing()">Get listing</button>
+
+
+<button (click)="test()">test</button>
+
+
+
+<mat-selection-list [formControl]="selectedToken">
+  <mat-list-option *ngFor="let offer of listedTokens" [value]="offer">
+    <p>Id: {{offer.id}} / amount: {{offer.amount}} / price: {{offer.price | getEther}}</p>
+  </mat-list-option>
+</mat-selection-list>
+
+
+<button (click)="approveMarket()">Approve MP</button>
+
+<mat-list>
+  <mat-list-item *ngFor="let myToken of myTokens">
+    <p *ngIf="myToken != null">Id : {{myToken.id}} / Amount : {{myToken.amount}}</p>
+  </mat-list-item>
+</mat-list>
+
+<form [formGroup]="singleOffer">
+
+  <label>Token id</label>
+  <input type="text" formControlName="id">
+
+  <label>Price</label>
+  <input type="text" formControlName="price">
+
+  <label>Amount</label>
+  <input type="text" formControlName="amount">
+
+  <button (click)="addOffer()">Add Offer</button>
+</form>
+
+
+<div *ngFor="let control of batchOffer.controls">
+  <form [formGroup]="$any(control)">
+
+    <label>Token id</label>
+    <input type="text" formControlName="id">
+
+    <label>Price</label>
+    <input type="text" formControlName="price">
+
+    <label>Amount</label>
+    <input type="text" formControlName="amount">
+  </form>
+</div>
+<button (click)="addBatch()">Add batch</button>
+<button (click)="addBatchOffer()">Add batchOffer</button>
+
+
+<button (click)="acceptOffer()">Accept</button>

@@ -7,4 +7,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'hardlar';
+
+  superMode = false;
+
+
+  switcheroo() {
+    this.superMode = !this.superMode;
+  }
 }

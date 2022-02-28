@@ -45,7 +45,6 @@ export class HomeComponent implements OnInit {
   async getBalance() {
     const address = this.balanceOf.value;
     const reading = await this.contractInfo.contract.balanceOf(address);
-    console.log(reading)
   }
 
   async getAllMinted() {

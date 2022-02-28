@@ -1,0 +1,39 @@
+<form [formGroup]="simpleMint">
+
+  <label>Address</label>
+  <input type="text" formControlName="address">
+
+  <label>Id</label>
+  <input type="number" formControlName="id">
+
+  <label>Amount</label>
+  <input type="number" formControlName="amount">
+
+  <button (click)="mintSingle()">Mint it</button>
+
+</form>
+
+<form [formGroup]="batchMint" (ngSubmit)="mintBatch()">
+
+  <label>address</label>
+  <input type="text" formControlName="address">
+
+  <button type="button" (click)="addOffer()">Add id</button>
+
+  <ng-container *ngFor="let control of offers.controls">
+
+    <div [formGroup]="$any(control)">
+      <label>id</label>
+      <input type="number" formControlName="id">
+
+      <label>Amount</label>
+      <input type="number" formControlName="amount">
+    </div>
+
+  </ng-container>
+
+  <button type="submit">Mint batch</button>
+
+
+</form>
+
