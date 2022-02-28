@@ -166,7 +166,7 @@ export class Marketplace1155 extends BaseContract {
       _contract: string,
       _ids: BigNumberish[],
       _amounts: BigNumberish[],
-      _pricesPerToken: BigNumberish[],
+      _prices: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -174,7 +174,7 @@ export class Marketplace1155 extends BaseContract {
       _contract: string,
       _id: BigNumberish,
       _amount: BigNumberish,
-      _pricePerToken: BigNumberish,
+      _price: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -222,7 +222,7 @@ export class Marketplace1155 extends BaseContract {
     _contract: string,
     _ids: BigNumberish[],
     _amounts: BigNumberish[],
-    _pricesPerToken: BigNumberish[],
+    _prices: BigNumberish[],
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -230,7 +230,7 @@ export class Marketplace1155 extends BaseContract {
     _contract: string,
     _id: BigNumberish,
     _amount: BigNumberish,
-    _pricePerToken: BigNumberish,
+    _price: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -276,7 +276,7 @@ export class Marketplace1155 extends BaseContract {
       _contract: string,
       _ids: BigNumberish[],
       _amounts: BigNumberish[],
-      _pricesPerToken: BigNumberish[],
+      _prices: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -284,7 +284,7 @@ export class Marketplace1155 extends BaseContract {
       _contract: string,
       _id: BigNumberish,
       _amount: BigNumberish,
-      _pricePerToken: BigNumberish,
+      _price: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -369,7 +369,7 @@ export class Marketplace1155 extends BaseContract {
       _contract: string,
       _ids: BigNumberish[],
       _amounts: BigNumberish[],
-      _pricesPerToken: BigNumberish[],
+      _prices: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -377,7 +377,7 @@ export class Marketplace1155 extends BaseContract {
       _contract: string,
       _id: BigNumberish,
       _amount: BigNumberish,
-      _pricePerToken: BigNumberish,
+      _price: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -424,7 +424,7 @@ export class Marketplace1155 extends BaseContract {
       _contract: string,
       _ids: BigNumberish[],
       _amounts: BigNumberish[],
-      _pricesPerToken: BigNumberish[],
+      _prices: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -432,7 +432,7 @@ export class Marketplace1155 extends BaseContract {
       _contract: string,
       _id: BigNumberish,
       _amount: BigNumberish,
-      _pricePerToken: BigNumberish,
+      _price: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

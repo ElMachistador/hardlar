@@ -63,7 +63,7 @@ describe("1155", () => {
     const tx = await market1.addOffer(token.address, 1, 50, 10);
     await tx.wait();
 
-    expect(await getInfo(marketplace, token, 1, add1)).to.equal("50,500");
+    expect(await getInfo(marketplace, token, 1, add1)).to.equal("50,10");
 
     const cnl = await market1.cancelOffer(token.address, 1);
     await cnl.wait();
@@ -85,9 +85,9 @@ describe("1155", () => {
     await tx.wait();
 
 
-    expect(await getInfo(marketplace, token, 1, add1)).to.equal('50,500');
-    expect(await getInfo(marketplace, token, 2, add1)).to.equal('100,2000');
-    expect(await getInfo(marketplace, token, 3, add1)).to.equal('150,4500');
+    expect(await getInfo(marketplace, token, 1, add1)).to.equal('50,10');
+    expect(await getInfo(marketplace, token, 2, add1)).to.equal('100,20');
+    expect(await getInfo(marketplace, token, 3, add1)).to.equal('150,30');
 
   });
 
@@ -122,7 +122,7 @@ describe("1155", () => {
     const tx = await market1.addOffer(token.address, 1, 50, 10);
     await tx.wait();
 
-    expect(await getInfo(marketplace, token, 1, add1)).to.equal('50,500')
+    expect(await getInfo(marketplace, token, 1, add1)).to.equal('50,10')
 
     const cnl = await market1.cancelOffer(token.address, 1);
     await cnl.wait();
@@ -147,7 +147,7 @@ describe("1155", () => {
       getInfo(marketplace, token, 3, add1),
     ]);
 
-    expect([id1, id2, id3]).to.deep.equal(['50,500', '100,2000', '150,4500']);
+    expect([id1, id2, id3]).to.deep.equal(['50,10', '100,20', '150,30']);
 
     const cnl = await market1.cancelBatchOffer(token.address, [1, 2, 3]);
     await cnl.wait();
@@ -199,8 +199,6 @@ describe("1155", () => {
     const market3 = marketplace.connect(signer3);
     const tx3 = await market3.acceptOffer(token.address, 1, add1, 1, "0x00", { value: 10 });
     await tx3.wait();
-
-    const checkListing = await marketplace.toSell(token.address, 1, add1);
 
     expect(await getInfo(marketplace, token, 1, add1)).to.equal("0,0");
 
