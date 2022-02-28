@@ -24,7 +24,7 @@ interface Marketplace1155Interface extends ethers.utils.Interface {
   functions: {
     "acceptBatchOffer(address,uint256[],address,uint256[],bytes)": FunctionFragment;
     "acceptOffer(address,uint256,address,uint256,bytes)": FunctionFragment;
-    "addGroupOffer(address,uint256[],uint256[],uint256[])": FunctionFragment;
+    "addBatchOffer(address,uint256[],uint256[],uint256[])": FunctionFragment;
     "addOffer(address,uint256,uint256,uint256)": FunctionFragment;
     "cancelBatchOffer(address,uint256[])": FunctionFragment;
     "cancelOffer(address,uint256)": FunctionFragment;
@@ -40,7 +40,7 @@ interface Marketplace1155Interface extends ethers.utils.Interface {
     values: [string, BigNumberish, string, BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "addGroupOffer",
+    functionFragment: "addBatchOffer",
     values: [string, BigNumberish[], BigNumberish[], BigNumberish[]]
   ): string;
   encodeFunctionData(
@@ -69,7 +69,7 @@ interface Marketplace1155Interface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "addGroupOffer",
+    functionFragment: "addBatchOffer",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "addOffer", data: BytesLike): Result;
@@ -93,7 +93,7 @@ interface Marketplace1155Interface extends ethers.utils.Interface {
 export type OnSaleEvent = TypedEvent<
   [string, BigNumber, string, BigNumber, BigNumber] & {
     tokenContract: string;
-    tokenId: BigNumber;
+    id: BigNumber;
     owner: string;
     amount: BigNumber;
     price: BigNumber;
@@ -145,48 +145,48 @@ export class Marketplace1155 extends BaseContract {
 
   functions: {
     acceptBatchOffer(
-      _tokenContract: string,
-      _tokenIds: BigNumberish[],
-      _tokenOwner: string,
+      _contract: string,
+      _ids: BigNumberish[],
+      _owner: string,
       _amount: BigNumberish[],
       _data: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     acceptOffer(
-      _tokenContract: string,
-      _tokenId: BigNumberish,
-      _tokenOwner: string,
+      _contract: string,
+      _id: BigNumberish,
+      _owner: string,
       _amount: BigNumberish,
       _data: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    addGroupOffer(
-      _tokenContract: string,
-      _tokenIds: BigNumberish[],
+    addBatchOffer(
+      _contract: string,
+      _ids: BigNumberish[],
       _amounts: BigNumberish[],
       _pricesPerToken: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     addOffer(
-      _tokenContract: string,
-      _tokenId: BigNumberish,
+      _contract: string,
+      _id: BigNumberish,
       _amount: BigNumberish,
       _pricePerToken: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     cancelBatchOffer(
-      _tokenContract: string,
-      _tokenIds: BigNumberish[],
+      _contract: string,
+      _ids: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     cancelOffer(
-      _tokenContract: string,
-      _tokenId: BigNumberish,
+      _contract: string,
+      _id: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -201,48 +201,48 @@ export class Marketplace1155 extends BaseContract {
   };
 
   acceptBatchOffer(
-    _tokenContract: string,
-    _tokenIds: BigNumberish[],
-    _tokenOwner: string,
+    _contract: string,
+    _ids: BigNumberish[],
+    _owner: string,
     _amount: BigNumberish[],
     _data: BytesLike,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   acceptOffer(
-    _tokenContract: string,
-    _tokenId: BigNumberish,
-    _tokenOwner: string,
+    _contract: string,
+    _id: BigNumberish,
+    _owner: string,
     _amount: BigNumberish,
     _data: BytesLike,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  addGroupOffer(
-    _tokenContract: string,
-    _tokenIds: BigNumberish[],
+  addBatchOffer(
+    _contract: string,
+    _ids: BigNumberish[],
     _amounts: BigNumberish[],
     _pricesPerToken: BigNumberish[],
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   addOffer(
-    _tokenContract: string,
-    _tokenId: BigNumberish,
+    _contract: string,
+    _id: BigNumberish,
     _amount: BigNumberish,
     _pricePerToken: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   cancelBatchOffer(
-    _tokenContract: string,
-    _tokenIds: BigNumberish[],
+    _contract: string,
+    _ids: BigNumberish[],
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   cancelOffer(
-    _tokenContract: string,
-    _tokenId: BigNumberish,
+    _contract: string,
+    _id: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -255,48 +255,48 @@ export class Marketplace1155 extends BaseContract {
 
   callStatic: {
     acceptBatchOffer(
-      _tokenContract: string,
-      _tokenIds: BigNumberish[],
-      _tokenOwner: string,
+      _contract: string,
+      _ids: BigNumberish[],
+      _owner: string,
       _amount: BigNumberish[],
       _data: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
     acceptOffer(
-      _tokenContract: string,
-      _tokenId: BigNumberish,
-      _tokenOwner: string,
+      _contract: string,
+      _id: BigNumberish,
+      _owner: string,
       _amount: BigNumberish,
       _data: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    addGroupOffer(
-      _tokenContract: string,
-      _tokenIds: BigNumberish[],
+    addBatchOffer(
+      _contract: string,
+      _ids: BigNumberish[],
       _amounts: BigNumberish[],
       _pricesPerToken: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<void>;
 
     addOffer(
-      _tokenContract: string,
-      _tokenId: BigNumberish,
+      _contract: string,
+      _id: BigNumberish,
       _amount: BigNumberish,
       _pricePerToken: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
     cancelBatchOffer(
-      _tokenContract: string,
-      _tokenIds: BigNumberish[],
+      _contract: string,
+      _ids: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<void>;
 
     cancelOffer(
-      _tokenContract: string,
-      _tokenId: BigNumberish,
+      _contract: string,
+      _id: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -313,7 +313,7 @@ export class Marketplace1155 extends BaseContract {
   filters: {
     "OnSale(address,uint256,address,uint256,uint256)"(
       tokenContract?: string | null,
-      tokenId?: BigNumberish | null,
+      id?: BigNumberish | null,
       owner?: string | null,
       amount?: null,
       price?: null
@@ -321,7 +321,7 @@ export class Marketplace1155 extends BaseContract {
       [string, BigNumber, string, BigNumber, BigNumber],
       {
         tokenContract: string;
-        tokenId: BigNumber;
+        id: BigNumber;
         owner: string;
         amount: BigNumber;
         price: BigNumber;
@@ -330,7 +330,7 @@ export class Marketplace1155 extends BaseContract {
 
     OnSale(
       tokenContract?: string | null,
-      tokenId?: BigNumberish | null,
+      id?: BigNumberish | null,
       owner?: string | null,
       amount?: null,
       price?: null
@@ -338,7 +338,7 @@ export class Marketplace1155 extends BaseContract {
       [string, BigNumber, string, BigNumber, BigNumber],
       {
         tokenContract: string;
-        tokenId: BigNumber;
+        id: BigNumber;
         owner: string;
         amount: BigNumber;
         price: BigNumber;
@@ -348,48 +348,48 @@ export class Marketplace1155 extends BaseContract {
 
   estimateGas: {
     acceptBatchOffer(
-      _tokenContract: string,
-      _tokenIds: BigNumberish[],
-      _tokenOwner: string,
+      _contract: string,
+      _ids: BigNumberish[],
+      _owner: string,
       _amount: BigNumberish[],
       _data: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     acceptOffer(
-      _tokenContract: string,
-      _tokenId: BigNumberish,
-      _tokenOwner: string,
+      _contract: string,
+      _id: BigNumberish,
+      _owner: string,
       _amount: BigNumberish,
       _data: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    addGroupOffer(
-      _tokenContract: string,
-      _tokenIds: BigNumberish[],
+    addBatchOffer(
+      _contract: string,
+      _ids: BigNumberish[],
       _amounts: BigNumberish[],
       _pricesPerToken: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     addOffer(
-      _tokenContract: string,
-      _tokenId: BigNumberish,
+      _contract: string,
+      _id: BigNumberish,
       _amount: BigNumberish,
       _pricePerToken: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     cancelBatchOffer(
-      _tokenContract: string,
-      _tokenIds: BigNumberish[],
+      _contract: string,
+      _ids: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     cancelOffer(
-      _tokenContract: string,
-      _tokenId: BigNumberish,
+      _contract: string,
+      _id: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -403,48 +403,48 @@ export class Marketplace1155 extends BaseContract {
 
   populateTransaction: {
     acceptBatchOffer(
-      _tokenContract: string,
-      _tokenIds: BigNumberish[],
-      _tokenOwner: string,
+      _contract: string,
+      _ids: BigNumberish[],
+      _owner: string,
       _amount: BigNumberish[],
       _data: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     acceptOffer(
-      _tokenContract: string,
-      _tokenId: BigNumberish,
-      _tokenOwner: string,
+      _contract: string,
+      _id: BigNumberish,
+      _owner: string,
       _amount: BigNumberish,
       _data: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    addGroupOffer(
-      _tokenContract: string,
-      _tokenIds: BigNumberish[],
+    addBatchOffer(
+      _contract: string,
+      _ids: BigNumberish[],
       _amounts: BigNumberish[],
       _pricesPerToken: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     addOffer(
-      _tokenContract: string,
-      _tokenId: BigNumberish,
+      _contract: string,
+      _id: BigNumberish,
       _amount: BigNumberish,
       _pricePerToken: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     cancelBatchOffer(
-      _tokenContract: string,
-      _tokenIds: BigNumberish[],
+      _contract: string,
+      _ids: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     cancelOffer(
-      _tokenContract: string,
-      _tokenId: BigNumberish,
+      _contract: string,
+      _id: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

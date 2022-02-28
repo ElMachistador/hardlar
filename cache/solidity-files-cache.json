@@ -896,8 +896,8 @@
       ]
     },
     "C:\\Users\\jerem\\code\\Angular\\hardlar\\contracts\\Marketplace1155.sol": {
-      "lastModificationDate": 1646043977559,
-      "contentHash": "89602261207f2b109a2b15628819cc75",
+      "lastModificationDate": 1646060984937,
+      "contentHash": "4a323d39bc6c86c759749beb7be6466a",
       "sourceName": "contracts/Marketplace1155.sol",
       "solcConfig": {
         "version": "0.8.2",

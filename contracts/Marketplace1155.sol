@@ -12,7 +12,7 @@ contract Marketplace1155 {
 
     event OnSale(
         address indexed tokenContract,
-        uint256 indexed tokenId,
+        uint256 indexed id,
         address indexed owner,
         uint256 amount,
         uint256 price
@@ -22,44 +22,41 @@ contract Marketplace1155 {
         public toSell;
 
     function addOffer(
-        address _tokenContract,
-        uint256 _tokenId,
+        address _contract,
+        uint256 _id,
         uint256 _amount,
         uint256 _pricePerToken
     ) public {
-        IERC1155 Token = IERC1155(address(_tokenContract));
-        require(Token.balanceOf(msg.sender, _tokenId) >= _amount);
+        IERC1155 Token = IERC1155(address(_contract));
+        require(Token.balanceOf(msg.sender, _id) >= _amount);
         uint256 totalPrice = _pricePerToken * _amount;
-        toSell[_tokenContract][_tokenId][msg.sender] = Listing(
-            _amount,
-            totalPrice
-        );
-        emit OnSale(_tokenContract, _tokenId, msg.sender, _amount, totalPrice);
+        toSell[_contract][_id][msg.sender] = Listing(_amount, totalPrice);
+        emit OnSale(_contract, _id, msg.sender, _amount, totalPrice);
     }
 
-    function addGroupOffer(
-        address _tokenContract,
-        uint256[] memory _tokenIds,
+    function addBatchOffer(
+        address _contract,
+        uint256[] memory _ids,
         uint256[] memory _amounts,
         uint256[] memory _pricesPerToken
     ) public {
-        IERC1155 Token = IERC1155(address(_tokenContract));
-        uint256 size = _tokenIds.length;
+        IERC1155 Token = IERC1155(address(_contract));
+        uint256 size = _ids.length;
         require(_amounts.length == size);
         require(_pricesPerToken.length == size);
         for (uint256 i = 0; i < size; i++) {
             require(
-                Token.balanceOf(msg.sender, _tokenIds[i]) >= _amounts[i],
+                Token.balanceOf(msg.sender, _ids[i]) >= _amounts[i],
                 "Not enough balance"
             );
             uint256 totalPrice = _pricesPerToken[i] * _amounts[i];
-            toSell[_tokenContract][_tokenIds[i]][msg.sender] = Listing(
+            toSell[_contract][_ids[i]][msg.sender] = Listing(
                 _amounts[i],
                 totalPrice
             );
             emit OnSale(
-                _tokenContract,
-                _tokenIds[i],
+                _contract,
+                _ids[i],
                 msg.sender,
                 _amounts[i],
                 totalPrice
@@ -67,140 +64,93 @@ contract Marketplace1155 {
         }
     }
 
-    function cancelOffer(address _tokenContract, uint256 _tokenId) public {
-        delete toSell[_tokenContract][_tokenId][msg.sender];
+    function cancelOffer(address _contract, uint256 _id) public {
+        delete toSell[_contract][_id][msg.sender];
     }
 
-    function cancelBatchOffer(
-        address _tokenContract,
-        uint256[] memory _tokenIds
-    ) public {
-        for (uint256 i = 0; i < _tokenIds.length; i++) {
-            delete toSell[_tokenContract][_tokenIds[i]][msg.sender];
+    function cancelBatchOffer(address _contract, uint256[] memory _ids) public {
+        for (uint256 i = 0; i < _ids.length; i++) {
+            delete toSell[_contract][_ids[i]][msg.sender];
         }
     }
 
     function acceptOffer(
-        address _tokenContract,
-        uint256 _tokenId,
-        address payable _tokenOwner,
+        address _contract,
+        uint256 _id,
+        address payable _owner,
         uint256 _amount,
         bytes memory _data
     ) public payable {
-        IERC1155 Token = IERC1155(address(_tokenContract));
+        IERC1155 Token = IERC1155(address(_contract));
         require(
-            _amount <= toSell[_tokenContract][_tokenId][_tokenOwner].amount,
+            _amount <= toSell[_contract][_id][_owner].amount,
             "Not enough stock"
         );
-        if (_amount == toSell[_tokenContract][_tokenId][_tokenOwner].amount) {
-            require(
-                msg.value == toSell[_tokenContract][_tokenId][_tokenOwner].price
-            );
-            uint256 amount = toSell[_tokenContract][_tokenId][_tokenOwner]
-                .amount;
-            Token.safeTransferFrom(
-                _tokenOwner,
-                msg.sender,
-                _tokenId,
-                amount,
-                _data
-            );
-            _tokenOwner.transfer(msg.value);
-            delete toSell[_tokenContract][_tokenId][_tokenOwner];
+        if (_amount == toSell[_contract][_id][_owner].amount) {
+            require(msg.value == toSell[_contract][_id][_owner].price);
+            uint256 amount = toSell[_contract][_id][_owner].amount;
+            Token.safeTransferFrom(_owner, msg.sender, _id, amount, _data);
+            _owner.transfer(msg.value);
+            delete toSell[_contract][_id][_owner];
         }
-        if (_amount < toSell[_tokenContract][_tokenId][_tokenOwner].amount) {
-            uint256 totalAmount = toSell[_tokenContract][_tokenId][_tokenOwner]
-                .amount;
-            uint256 totalPrice = toSell[_tokenContract][_tokenId][_tokenOwner]
-                .price;
+        if (_amount < toSell[_contract][_id][_owner].amount) {
+            uint256 totalAmount = toSell[_contract][_id][_owner].amount;
+            uint256 totalPrice = toSell[_contract][_id][_owner].price;
             uint256 singlePrice = totalPrice / totalAmount;
             require(
                 msg.value == singlePrice * _amount,
                 "Not enough value sent"
             );
-            Token.safeTransferFrom(
-                _tokenOwner,
-                msg.sender,
-                _tokenId,
-                _amount,
-                _data
-            );
-            toSell[_tokenContract][_tokenId][_tokenOwner].amount -= _amount;
-            toSell[_tokenContract][_tokenId][_tokenOwner].price -= (_amount *
-                singlePrice);
-            _tokenOwner.transfer(msg.value);
-            if (toSell[_tokenContract][_tokenId][_tokenOwner].amount == 0) {
-                delete toSell[_tokenContract][_tokenId][_tokenOwner];
+            Token.safeTransferFrom(_owner, msg.sender, _id, _amount, _data);
+            toSell[_contract][_id][_owner].amount -= _amount;
+            toSell[_contract][_id][_owner].price -= (_amount * singlePrice);
+            _owner.transfer(msg.value);
+            if (toSell[_contract][_id][_owner].amount == 0) {
+                delete toSell[_contract][_id][_owner];
             }
         }
     }
 
     function acceptBatchOffer(
-        address _tokenContract,
-        uint256[] memory _tokenIds,
-        address payable _tokenOwner,
+        address _contract,
+        uint256[] memory _ids,
+        address payable _owner,
         uint256[] memory _amount,
         bytes memory _data
     ) public payable {
-        IERC1155 Token = IERC1155(address(_tokenContract));
-        uint256 size = _tokenIds.length;
+        IERC1155 Token = IERC1155(address(_contract));
+        uint256 size = _ids.length;
         uint256 batchPrice = 0;
         uint256[] memory amounts = new uint256[](size);
         for (uint256 i = 0; i < size; i++) {
             require(
-                _amount[i] <=
-                    toSell[_tokenContract][_tokenIds[i]][_tokenOwner].amount,
+                _amount[i] <= toSell[_contract][_ids[i]][_owner].amount,
                 "Not enough stock"
             );
-            if (
-                _amount[i] ==
-                toSell[_tokenContract][_tokenIds[i]][_tokenOwner].amount
-            ) {
-                batchPrice += toSell[_tokenContract][_tokenIds[i]][_tokenOwner]
-                    .price;
-                amounts[i] = toSell[_tokenContract][_tokenIds[i]][_tokenOwner]
-                    .amount;
+            if (_amount[i] == toSell[_contract][_ids[i]][_owner].amount) {
+                batchPrice += toSell[_contract][_ids[i]][_owner].price;
+                amounts[i] = toSell[_contract][_ids[i]][_owner].amount;
             }
-            if (
-                _amount[i] <
-                toSell[_tokenContract][_tokenIds[i]][_tokenOwner].amount
-            ) {
-                uint256 totalAmount = toSell[_tokenContract][_tokenIds[i]][
-                    _tokenOwner
-                ].amount;
-                uint256 totalPrice = toSell[_tokenContract][_tokenIds[i]][
-                    _tokenOwner
-                ].price;
+            if (_amount[i] < toSell[_contract][_ids[i]][_owner].amount) {
+                uint256 totalAmount = toSell[_contract][_ids[i]][_owner].amount;
+                uint256 totalPrice = toSell[_contract][_ids[i]][_owner].price;
                 uint256 singlePrice = totalPrice / totalAmount;
                 batchPrice += singlePrice * _amount[i];
                 amounts[i] = _amount[i];
             }
         }
         require(msg.value == batchPrice, "value doesn't match required amount");
-        for (uint256 z = 0; z < size; z++) {
-            uint256 totalAmount = toSell[_tokenContract][_tokenIds[z]][
-                _tokenOwner
-            ].amount;
-            uint256 totalPrice = toSell[_tokenContract][_tokenIds[z]][
-                _tokenOwner
-            ].price;
+        for (uint256 i = 0; i < size; i++) {
+            uint256 totalAmount = toSell[_contract][_ids[i]][_owner].amount;
+            uint256 totalPrice = toSell[_contract][_ids[i]][_owner].price;
             uint256 singlePrice = totalPrice / totalAmount;
-            toSell[_tokenContract][_tokenIds[z]][_tokenOwner].amount -= _amount[
-                z
-            ];
-            toSell[_tokenContract][_tokenIds[z]][_tokenOwner].price -= (_amount[
-                z
-            ] * singlePrice);
-            if (toSell[_tokenContract][_tokenIds[z]][_tokenOwner].amount == 0){
-               delete toSell[_tokenContract][_tokenIds[z]][_tokenOwner];
+            toSell[_contract][_ids[i]][_owner].amount -= _amount[i];
+            toSell[_contract][_ids[i]][_owner].price -= (_amount[i] *
+                singlePrice);
+            if (toSell[_contract][_ids[i]][_owner].amount == 0) {
+                delete toSell[_contract][_ids[i]][_owner];
             }
         }
-        Token.safeBatchTransferFrom(
-            _tokenOwner,
-            msg.sender,
-            _tokenIds,
-            amounts,
-            _data
-        );
+        Token.safeBatchTransferFrom(_owner, msg.sender, _ids, amounts, _data);
     }
 }

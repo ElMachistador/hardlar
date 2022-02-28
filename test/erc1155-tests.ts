@@ -81,7 +81,7 @@ describe("1155", () => {
 
     const market1 = marketplace.connect(signer1);
 
-    const tx = await market1.addGroupOffer(token.address, [1, 2, 3], [50, 100, 150], [10, 20, 30]);
+    const tx = await market1.addBatchOffer(token.address, [1, 2, 3], [50, 100, 150], [10, 20, 30]);
     await tx.wait();
 
 
@@ -98,7 +98,7 @@ describe("1155", () => {
     const approval = await token1.setApprovalForAll(marketplace.address, true);
     await approval.wait();
     const market1 = marketplace.connect(signer1);
-    const tx = await market1.addGroupOffer(token.address, [1, 2, 3], [50, 100, 150], [10, 20, 30]);
+    const tx = await market1.addBatchOffer(token.address, [1, 2, 3], [50, 100, 150], [10, 20, 30]);
     await tx.wait();
     //
 
@@ -137,7 +137,7 @@ describe("1155", () => {
     const approval = await token1.setApprovalForAll(marketplace.address, true);
     await approval.wait();
     const market1 = marketplace.connect(signer1);
-    const tx = await market1.addGroupOffer(token.address, [1, 2, 3], [50, 100, 150], [10, 20, 30]);
+    const tx = await market1.addBatchOffer(token.address, [1, 2, 3], [50, 100, 150], [10, 20, 30]);
     await tx.wait();
     //
 
@@ -213,7 +213,7 @@ describe("1155", () => {
     await approval.wait();
 
     const market1 = marketplace.connect(signer1);
-    const tx = await market1.addGroupOffer(token.address, [1, 2, 3], [100, 200, 300], [10, 20, 30]);
+    const tx = await market1.addBatchOffer(token.address, [1, 2, 3], [100, 200, 300], [10, 20, 30]);
     await tx.wait();
 
     const market2 = marketplace.connect(signer2);
