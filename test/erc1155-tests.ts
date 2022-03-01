@@ -104,7 +104,7 @@ describe("1155", () => {
 
     const market4 = marketplace.connect(signer4);
 
-    const tx2 = await market4.acceptBatchOffer(token.address, [1, 2, 3], add1, [50, 100, 150], "0x00", { value: 7000 });
+    const tx2 = await market4.acceptBatchOffer(token.address, [1, 2, 3], add1, add4, [50, 100, 150], "0x00", { value: 7000 });
     await tx2.wait();
 
     const bigBatchBalance = await token.balanceOfBatch([add4, add4, add4], [1, 2, 3]);
@@ -176,7 +176,7 @@ describe("1155", () => {
 
     const market2 = marketplace.connect(signer2);
 
-    const tx2 = await market2.acceptOffer(token.address, 1, add1, 99, "0x00", { value: 990 });
+    const tx2 = await market2.acceptOffer(token.address, 1, add1, add2, 99, "0x00", { value: 990 });
     await tx2.wait();
 
     expect(await getInfo(marketplace, token, 1, add1)).to.equal("1,10")
@@ -192,12 +192,12 @@ describe("1155", () => {
     const tx = await market1.addOffer(token.address, 1, 100, 10);
     await tx.wait();
     const market2 = marketplace.connect(signer2);
-    const tx2 = await market2.acceptOffer(token.address, 1, add1, 99, "0x00", { value: 990 });
+    const tx2 = await market2.acceptOffer(token.address, 1, add1, add2, 99, "0x00", { value: 990 });
     await tx2.wait();
     //
 
     const market3 = marketplace.connect(signer3);
-    const tx3 = await market3.acceptOffer(token.address, 1, add1, 1, "0x00", { value: 10 });
+    const tx3 = await market3.acceptOffer(token.address, 1, add1, add3, 1, "0x00", { value: 10 });
     await tx3.wait();
 
     expect(await getInfo(marketplace, token, 1, add1)).to.equal("0,0");
@@ -215,12 +215,12 @@ describe("1155", () => {
     await tx.wait();
 
     const market2 = marketplace.connect(signer2);
-    const tx2 = await market2.acceptBatchOffer(token.address, [1, 2, 3], add1, [50, 100, 150], "0x00", { value: 7000 });
+    const tx2 = await market2.acceptBatchOffer(token.address, [1, 2, 3], add1, add2, [50, 100, 150], "0x00", { value: 7000 });
     tx2.wait();
 
 
     const market3 = marketplace.connect(signer3);
-    const tx3 = await market3.acceptBatchOffer(token.address, [1, 2, 3], add1, [50, 100, 150], "0x00", { value: 7000 });
+    const tx3 = await market3.acceptBatchOffer(token.address, [1, 2, 3], add1, add2, [50, 100, 150], "0x00", { value: 7000 });
     await tx3.wait();
 
     expect(await getInfo(marketplace, token, 1, add1)).to.equal("0,0");
@@ -228,5 +228,6 @@ describe("1155", () => {
     expect(await getInfo(marketplace, token, 3, add1)).to.equal("0,0");
 
   });
+
 
 });

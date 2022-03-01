@@ -22,8 +22,8 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface Marketplace1155Interface extends ethers.utils.Interface {
   functions: {
-    "acceptBatchOffer(address,uint256[],address,uint256[],bytes)": FunctionFragment;
-    "acceptOffer(address,uint256,address,uint256,bytes)": FunctionFragment;
+    "acceptBatchOffer(address,uint256[],address,address,uint256[],bytes)": FunctionFragment;
+    "acceptOffer(address,uint256,address,address,uint256,bytes)": FunctionFragment;
     "addBatchOffer(address,uint256[],uint256[],uint256[])": FunctionFragment;
     "addOffer(address,uint256,uint256,uint256)": FunctionFragment;
     "cancelBatchOffer(address,uint256[])": FunctionFragment;
@@ -33,11 +33,11 @@ interface Marketplace1155Interface extends ethers.utils.Interface {
 
   encodeFunctionData(
     functionFragment: "acceptBatchOffer",
-    values: [string, BigNumberish[], string, BigNumberish[], BytesLike]
+    values: [string, BigNumberish[], string, string, BigNumberish[], BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "acceptOffer",
-    values: [string, BigNumberish, string, BigNumberish, BytesLike]
+    values: [string, BigNumberish, string, string, BigNumberish, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "addBatchOffer",
@@ -148,6 +148,7 @@ export class Marketplace1155 extends BaseContract {
       _contract: string,
       _ids: BigNumberish[],
       _owner: string,
+      _to: string,
       _amount: BigNumberish[],
       _data: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -157,6 +158,7 @@ export class Marketplace1155 extends BaseContract {
       _contract: string,
       _id: BigNumberish,
       _owner: string,
+      _to: string,
       _amount: BigNumberish,
       _data: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -204,6 +206,7 @@ export class Marketplace1155 extends BaseContract {
     _contract: string,
     _ids: BigNumberish[],
     _owner: string,
+    _to: string,
     _amount: BigNumberish[],
     _data: BytesLike,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -213,6 +216,7 @@ export class Marketplace1155 extends BaseContract {
     _contract: string,
     _id: BigNumberish,
     _owner: string,
+    _to: string,
     _amount: BigNumberish,
     _data: BytesLike,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -258,6 +262,7 @@ export class Marketplace1155 extends BaseContract {
       _contract: string,
       _ids: BigNumberish[],
       _owner: string,
+      _to: string,
       _amount: BigNumberish[],
       _data: BytesLike,
       overrides?: CallOverrides
@@ -267,6 +272,7 @@ export class Marketplace1155 extends BaseContract {
       _contract: string,
       _id: BigNumberish,
       _owner: string,
+      _to: string,
       _amount: BigNumberish,
       _data: BytesLike,
       overrides?: CallOverrides
@@ -351,6 +357,7 @@ export class Marketplace1155 extends BaseContract {
       _contract: string,
       _ids: BigNumberish[],
       _owner: string,
+      _to: string,
       _amount: BigNumberish[],
       _data: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -360,6 +367,7 @@ export class Marketplace1155 extends BaseContract {
       _contract: string,
       _id: BigNumberish,
       _owner: string,
+      _to: string,
       _amount: BigNumberish,
       _data: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -406,6 +414,7 @@ export class Marketplace1155 extends BaseContract {
       _contract: string,
       _ids: BigNumberish[],
       _owner: string,
+      _to: string,
       _amount: BigNumberish[],
       _data: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -415,6 +424,7 @@ export class Marketplace1155 extends BaseContract {
       _contract: string,
       _id: BigNumberish,
       _owner: string,
+      _to: string,
       _amount: BigNumberish,
       _data: BytesLike,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
