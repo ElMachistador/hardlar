@@ -17,7 +17,7 @@ async function getInfo(marketplace: Marketplace1155, token: any, id: number, own
   return `${amount},${price}`;
 }
 
-describe("1155", () => {
+describe.skip("1155", () => {
   let token: Halp;
   let marketplace: Marketplace1155;
   let owner: any;

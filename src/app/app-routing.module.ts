@@ -49,6 +49,10 @@ const routes: Routes = [
   {
     path: 'login1155',
     loadChildren: () => import('./ERC1155/login1155/login1155.module').then(m => m.Login1155Module)
+  },
+  {
+    path: 'uri',
+    loadChildren: () => import('./ERC1155/uri/uri.module').then(m => m.UriModule)
   }
 ];
 

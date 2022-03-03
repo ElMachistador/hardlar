@@ -84,11 +84,23 @@ interface Marketplace1155Interface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "toSell", data: BytesLike): Result;
 
   events: {
+    "Cancelled(address,uint256,address)": EventFragment;
     "OnSale(address,uint256,address,uint256,uint256)": EventFragment;
+    "Sold(address,uint256,address,address)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "Cancelled"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OnSale"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Sold"): EventFragment;
 }
+
+export type CancelledEvent = TypedEvent<
+  [string, BigNumber, string] & {
+    tokenContract: string;
+    id: BigNumber;
+    owner: string;
+  }
+>;
 
 export type OnSaleEvent = TypedEvent<
   [string, BigNumber, string, BigNumber, BigNumber] & {
@@ -97,6 +109,15 @@ export type OnSaleEvent = TypedEvent<
     owner: string;
     amount: BigNumber;
     price: BigNumber;
+  }
+>;
+
+export type SoldEvent = TypedEvent<
+  [string, BigNumber, string, string] & {
+    tokenContract: string;
+    id: BigNumber;
+    newOwner: string;
+    originalOwner: string;
   }
 >;
 
@@ -317,6 +338,24 @@ export class Marketplace1155 extends BaseContract {
   };
 
   filters: {
+    "Cancelled(address,uint256,address)"(
+      tokenContract?: string | null,
+      id?: BigNumberish | null,
+      owner?: string | null
+    ): TypedEventFilter<
+      [string, BigNumber, string],
+      { tokenContract: string; id: BigNumber; owner: string }
+    >;
+
+    Cancelled(
+      tokenContract?: string | null,
+      id?: BigNumberish | null,
+      owner?: string | null
+    ): TypedEventFilter<
+      [string, BigNumber, string],
+      { tokenContract: string; id: BigNumber; owner: string }
+    >;
+
     "OnSale(address,uint256,address,uint256,uint256)"(
       tokenContract?: string | null,
       id?: BigNumberish | null,
@@ -348,6 +387,36 @@ export class Marketplace1155 extends BaseContract {
         owner: string;
         amount: BigNumber;
         price: BigNumber;
+      }
+    >;
+
+    "Sold(address,uint256,address,address)"(
+      tokenContract?: string | null,
+      id?: BigNumberish | null,
+      newOwner?: string | null,
+      originalOwner?: null
+    ): TypedEventFilter<
+      [string, BigNumber, string, string],
+      {
+        tokenContract: string;
+        id: BigNumber;
+        newOwner: string;
+        originalOwner: string;
+      }
+    >;
+
+    Sold(
+      tokenContract?: string | null,
+      id?: BigNumberish | null,
+      newOwner?: string | null,
+      originalOwner?: null
+    ): TypedEventFilter<
+      [string, BigNumber, string, string],
+      {
+        tokenContract: string;
+        id: BigNumber;
+        newOwner: string;
+        originalOwner: string;
       }
     >;
   };

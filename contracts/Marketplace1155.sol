@@ -2,10 +2,10 @@
 pragma solidity ^0.8.2;
 
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
-import "hardhat/console.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-contract Marketplace1155 {
+contract Marketplace1155 is ReentrancyGuard {
 
     using SafeMath for uint256;    
 
@@ -43,7 +43,7 @@ contract Marketplace1155 {
         uint256 _id,
         uint256 _amount,
         uint256 _price
-    ) public {
+    ) public nonReentrant {
         IERC1155 Token = IERC1155(address(_contract));
         require(Token.balanceOf(msg.sender, _id) >= _amount, "Not enough tokens");
         toSell[_contract][_id][msg.sender] = Listing(_amount, _price);
@@ -55,7 +55,7 @@ contract Marketplace1155 {
         uint256[] memory _ids,
         uint256[] memory _amounts,
         uint256[] memory _prices
-    ) public {
+    ) public nonReentrant {
         IERC1155 Token = IERC1155(address(_contract));
         uint256 size = _ids.length;
 
@@ -89,7 +89,7 @@ contract Marketplace1155 {
         address _to,
         uint256 _amount,
         bytes memory _data
-    ) public payable {
+    ) public payable nonReentrant {  
         IERC1155 Token = IERC1155(address(_contract));
         Listing storage listing = toSell[_contract][_id][_owner];
         
@@ -98,10 +98,10 @@ contract Marketplace1155 {
         require(Token.balanceOf(_owner, _id) >= _amount, "Seller no longer owns enough tokens for this transaction");
         require(msg.value == toSell[_contract][_id][_owner].price.mul(_amount));
 
+        listing.amount = listing.amount.sub(_amount);
+
         Token.safeTransferFrom(_owner, _to, _id, _amount, _data);
         _owner.transfer(msg.value);
-
-        listing.amount = listing.amount.sub(_amount);
 
         if (toSell[_contract][_id][_owner].amount == 0){
             delete toSell[_contract][_id][_owner];
@@ -116,7 +116,7 @@ contract Marketplace1155 {
         address _to,
         uint256[] memory _amount,
         bytes memory _data
-    ) public payable {
+    ) public payable nonReentrant {
         IERC1155 Token = IERC1155(address(_contract));
 
         uint256 size = _ids.length;

@@ -131,7 +131,7 @@ export class Marketplace1155Component implements OnInit {
     const ids: number[] = offer.map((offer: Offer) => offer.id);
     const amounts: number[] = offer.map((offer: Offer) => offer.amount);
     const price: number = offer.map((offer: Offer) => offer.price);
-    const tx = await this.market.marketplace.addGroupOffer(contractAddress, ids, amounts, ethers.utils.parseEther(`${price}`));
+    const tx = await this.market.marketplace.addBatchOffer(contractAddress, ids, amounts, ethers.utils.parseEther(`${price}`));
     await tx.wait();
 
   }
@@ -191,6 +191,7 @@ export class Marketplace1155Component implements OnInit {
 
   async acceptOffer() {
     const offers = this.selectedToken.value as Offer[];
+    const sender = await this.market.signer.getAddress();
     // 1. Construct batches
     const batches: Record<string, string[]> = {};
     for (const offer of offers) {
@@ -206,7 +207,7 @@ export class Marketplace1155Component implements OnInit {
       const [contract, owner] = key.split(':');
       if (values.length === 1) {
         const [id, price] = values[0].split(':');
-        await this.market.marketplace.acceptOffer(contract, id, owner, '0x00', { value: price });
+        await this.market.marketplace.acceptOffer(contract, id, owner, sender, '0x00', { value: price });
       } else {
         let totalPrice = 0;
         let ids = [];
@@ -215,7 +216,7 @@ export class Marketplace1155Component implements OnInit {
           totalPrice += Number(price);
           ids.push(id)
         }
-        await this.market.marketplace.acceptBatchOffer(contract, ids, owner, '0x00', { value: totalPrice });
+        await this.market.marketplace.acceptBatchOffer(contract, ids, owner, sender, '0x00', { value: totalPrice });
       }
     }
   }

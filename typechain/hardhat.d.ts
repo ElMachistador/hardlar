@@ -108,6 +108,10 @@ declare module "hardhat/types/runtime" {
       name: "RandomToken",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.RandomToken__factory>;
+    getContractFactory(
+      name: "URIToken",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.URIToken__factory>;
 
     getContractAt(
       name: "Ownable",
@@ -229,6 +233,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.RandomToken>;
+    getContractAt(
+      name: "URIToken",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.URIToken>;
 
     // default types
     getContractFactory(

@@ -27,6 +27,13 @@ async function main() {
   await marketplace.deployed();
 
   console.log("Marketplace1155 deployed to:", marketplace.address);
+
+  const URIToken = await ethers.getContractFactory('URIToken');
+  const uriToken = await URIToken.deploy();
+
+  await uriToken.deployed();
+
+  console.log("UriToken deployed to:", uriToken.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

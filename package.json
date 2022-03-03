@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "hardhat:node": "hardhat node --tsconfig tsconfig.hardhat.json"
+    "hardhat:node": "hardhat node --tsconfig tsconfig.hardhat.json",
+    "hardhat:deploy": "hardhat run scripts/deploy.ts --network localhost --tsconfig tsconfig.hardhat.json"
   },
   "private": true,
   "dependencies": {

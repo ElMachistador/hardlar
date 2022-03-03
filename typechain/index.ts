@@ -25,6 +25,7 @@ export type { Marketplace1155 } from "./Marketplace1155";
 export type { MarketplaceERC20 } from "./MarketplaceERC20";
 export type { Quotes } from "./Quotes";
 export type { RandomToken } from "./RandomToken";
+export type { URIToken } from "./URIToken";
 
 export { Ownable__factory } from "./factories/Ownable__factory";
 export { ERC1155__factory } from "./factories/ERC1155__factory";
@@ -50,3 +51,4 @@ export { Marketplace1155__factory } from "./factories/Marketplace1155__factory";
 export { MarketplaceERC20__factory } from "./factories/MarketplaceERC20__factory";
 export { Quotes__factory } from "./factories/Quotes__factory";
 export { RandomToken__factory } from "./factories/RandomToken__factory";
+export { URIToken__factory } from "./factories/URIToken__factory";
