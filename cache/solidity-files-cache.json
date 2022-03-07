@@ -372,8 +372,8 @@
       ]
     },
     "C:\\Users\\jerem\\code\\Angular\\hardlar\\contracts\\URI.sol": {
-      "lastModificationDate": 1646231798110,
-      "contentHash": "dd13ef90de83a010f62b72e6708fa900",
+      "lastModificationDate": 1646323783639,
+      "contentHash": "09f7fe4307481b4b5d7f703869bfac97",
       "sourceName": "contracts/URI.sol",
       "solcConfig": {
         "version": "0.8.2",

@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl } from '@angular/forms';
 
 import { ethers } from 'ethers';
+import { ERC721 } from '../erc721';
 
 @Component({
   selector: 'app-token',
@@ -30,6 +31,7 @@ export class TokenComponent implements OnInit {
   constructor(
     private contractInfo: ContractInfosService,
     private route: ActivatedRoute,
+    private ERC721: ERC721
   ) { }
 
   async ngOnInit() {

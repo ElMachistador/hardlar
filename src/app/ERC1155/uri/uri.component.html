@@ -1,5 +1,44 @@
 <h3>URI token</h3>
 
-<label>id</label>
+<!-- <label>id</label>
 <input type="number" [formControl]="tokenId">
 <button (click)="getUri()">Uri</button>
+
+<button (click)="add()">Upload meta</button> -->
+
+<section>
+  <label>Path</label>
+  <input type="text" [formControl]="ipfsPath">
+  <button (click)="getJson()">Get file</button>
+</section>
+
+<ng-container *ngIf="metaData">
+  <p>{{metaData}}</p>
+</ng-container>
+
+
+<form [formGroup]="form">
+  
+  <input type="file" (change)="upload($event)">
+  
+  <label>name</label>
+  <input type="text" formControlName="name">
+  
+  <label>description</label>
+  <input type="text" formControlName="description">
+
+  <label>Id</label>
+  <input type="text" formControlName="id">
+  
+  <button (click)="createBundle()">create</button>
+
+</form>
+
+<section>
+  <input type="text" [formControl]="idUri">
+  <button (click)="getTokenUri()">Get uri</button>
+</section>
+
+<ng-container *ngIf="metaDataUri">
+  <p>{{metaDataUri}}</p>
+</ng-container>

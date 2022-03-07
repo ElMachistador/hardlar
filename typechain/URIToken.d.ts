@@ -28,13 +28,17 @@ interface URITokenInterface extends ethers.utils.Interface {
     "balanceOf(address,uint256)": FunctionFragment;
     "balanceOfBatch(address[],uint256[])": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
+    "mint(address,uint256,uint256,string,bytes)": FunctionFragment;
+    "mintBatch(address,uint256[],uint256[],bytes)": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "safeBatchTransferFrom(address,address,uint256[],uint256[],bytes)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,uint256,bytes)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
+    "setTokenUri(uint256,string)": FunctionFragment;
     "setURI(string)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
+    "tokenUri(uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "uri(uint256)": FunctionFragment;
   };
@@ -58,6 +62,14 @@ interface URITokenInterface extends ethers.utils.Interface {
     functionFragment: "isApprovedForAll",
     values: [string, string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "mint",
+    values: [string, BigNumberish, BigNumberish, string, BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "mintBatch",
+    values: [string, BigNumberish[], BigNumberish[], BytesLike]
+  ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
@@ -75,10 +87,18 @@ interface URITokenInterface extends ethers.utils.Interface {
     functionFragment: "setApprovalForAll",
     values: [string, boolean]
   ): string;
+  encodeFunctionData(
+    functionFragment: "setTokenUri",
+    values: [BigNumberish, string]
+  ): string;
   encodeFunctionData(functionFragment: "setURI", values: [string]): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "tokenUri",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
@@ -102,6 +122,8 @@ interface URITokenInterface extends ethers.utils.Interface {
     functionFragment: "isApprovedForAll",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "mintBatch", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
@@ -119,11 +141,16 @@ interface URITokenInterface extends ethers.utils.Interface {
     functionFragment: "setApprovalForAll",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "setTokenUri",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "setURI", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "tokenUri", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
     data: BytesLike
@@ -251,6 +278,23 @@ export class URIToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
+    mint(
+      account: string,
+      id: BigNumberish,
+      amount: BigNumberish,
+      _uri: string,
+      data: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    mintBatch(
+      to: string,
+      ids: BigNumberish[],
+      amounts: BigNumberish[],
+      data: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     renounceOwnership(
@@ -281,6 +325,12 @@ export class URIToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setTokenUri(
+      _id: BigNumberish,
+      _uri: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setURI(
       newuri: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -291,12 +341,14 @@ export class URIToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
+    tokenUri(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
+
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    uri(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
+    uri(_id: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
   };
 
   COPPER(overrides?: CallOverrides): Promise<BigNumber>;
@@ -324,6 +376,23 @@ export class URIToken extends BaseContract {
     operator: string,
     overrides?: CallOverrides
   ): Promise<boolean>;
+
+  mint(
+    account: string,
+    id: BigNumberish,
+    amount: BigNumberish,
+    _uri: string,
+    data: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  mintBatch(
+    to: string,
+    ids: BigNumberish[],
+    amounts: BigNumberish[],
+    data: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -355,6 +424,12 @@ export class URIToken extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setTokenUri(
+    _id: BigNumberish,
+    _uri: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setURI(
     newuri: string,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -365,12 +440,14 @@ export class URIToken extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
+  tokenUri(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
   transferOwnership(
     newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  uri(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+  uri(_id: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
     COPPER(overrides?: CallOverrides): Promise<BigNumber>;
@@ -398,6 +475,23 @@ export class URIToken extends BaseContract {
       operator: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    mint(
+      account: string,
+      id: BigNumberish,
+      amount: BigNumberish,
+      _uri: string,
+      data: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    mintBatch(
+      to: string,
+      ids: BigNumberish[],
+      amounts: BigNumberish[],
+      data: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -427,6 +521,12 @@ export class URIToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    setTokenUri(
+      _id: BigNumberish,
+      _uri: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     setURI(newuri: string, overrides?: CallOverrides): Promise<void>;
 
     supportsInterface(
@@ -434,12 +534,14 @@ export class URIToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
+    tokenUri(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
     transferOwnership(
       newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    uri(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+    uri(_id: BigNumberish, overrides?: CallOverrides): Promise<string>;
   };
 
   filters: {
@@ -583,6 +685,23 @@ export class URIToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    mint(
+      account: string,
+      id: BigNumberish,
+      amount: BigNumberish,
+      _uri: string,
+      data: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    mintBatch(
+      to: string,
+      ids: BigNumberish[],
+      amounts: BigNumberish[],
+      data: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(
@@ -613,6 +732,12 @@ export class URIToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setTokenUri(
+      _id: BigNumberish,
+      _uri: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setURI(
       newuri: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -623,12 +748,14 @@ export class URIToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    tokenUri(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    uri(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    uri(_id: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -656,6 +783,23 @@ export class URIToken extends BaseContract {
       account: string,
       operator: string,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    mint(
+      account: string,
+      id: BigNumberish,
+      amount: BigNumberish,
+      _uri: string,
+      data: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    mintBatch(
+      to: string,
+      ids: BigNumberish[],
+      amounts: BigNumberish[],
+      data: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -688,6 +832,12 @@ export class URIToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    setTokenUri(
+      _id: BigNumberish,
+      _uri: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     setURI(
       newuri: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -698,13 +848,18 @@ export class URIToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    tokenUri(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     uri(
-      arg0: BigNumberish,
+      _id: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };

@@ -42,8 +42,13 @@ export class Home1155Component implements OnInit {
   }
 
   private async getSingleMinted() {
+
     const filter = this.contract.token.filters.TransferSingle(null, constants.AddressZero);
+
     const query = await this.contract.token.queryFilter(filter);
+
+    console.log(query)
+    
     return query.map(elem => {
       const id = parseInt(elem.args![3]._hex, 16);
       const amount = parseInt(elem.args![4]._hex, 16);

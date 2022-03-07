@@ -1,0 +1,7 @@
+{
+  "API": {
+    "HTTPHeaders": {
+      "Access-Control-Allow-Origin": ["http://localhost:4200"]
+    }
+  }
+}
