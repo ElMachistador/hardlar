@@ -88,17 +88,21 @@ export class UriComponent implements OnInit {
   }
 
   async createBundle() {
-    if (this.file && this.form.valid) {
+    if (this.form.valid) {
       //Upload file and get path
-      const { path: pathAsset } = await this.ipfs.add({ content: this.file });
+      const {name, description, id} = this.form.value;
+      const metadata = {name, description, id}
+      const result = await this.ipfs.add({ path: 'nft/metada.json', content: JSON.stringify(metadata) });
+      console.log(result);
       //create metadata with path and form
-      const { name, description, id } = this.form.value;
-      const metaData = { name, description, image: pathAsset };
-      //upload metadata and get path 
-      const { path } = await this.ipfs.add({ content: JSON.stringify(metaData) });
-      //mint token with path as URI for tokenId
-      const tx = await this.uri.uriToken.mint("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", id, 1, `${path}`, "0x00");
-      tx.wait();
+      // const metaData = { name, description, image: assetUri };
+      // const { name, description, id } = this.form.value;
+      // //upload metadata and get path 
+      // const { cid: metaDataCid} = await this.ipfs.add({path: '/nft/metadata.json', content: JSON.stringify(metaData) });
+      // console.log(metaDataCid.toString())
+      // //mint token with path as URI for tokenId
+      // const tx = await this.uri.uriToken.mint("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", id, 1, `${path}`, "0x00");
+      // tx.wait();
     }
   }
 
